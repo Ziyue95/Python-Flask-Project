@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}UserPage{% endblock %}
+{% block css %}/static/styles/pages/profile.css{% endblock %}
+{% block content %}
+<div class="page-main">
+    <article>
+        <header class="profile-detail">
+            <div class="profile-avatar">
+                <img src="{{user.head_url}}">
+            </div>
+            <div class="profile-content">
+                <div class="profile-info-main" data-reactid=".0.1.0.0:0.1.0">
+                    <h1 class="name" title="taylorswift">{{user.username}}</h1>
+                    <span class="verified" title="Verified">Verified</span>
+                    <span>
+                        <button class="btn-success">Upload Picture</button>
+                    </span>
+                    <button class="more-info">Option</button>
+                </div>
+            </div>
+        </header>
+        <div class="list">
+            <div class="list">
+                {% for image in user.images %}
+                <a class="item" href="/image/{{image.id}}">
+                    <div class="img-box">
+                        <img src="{{image.url}}">
+                    </div>
+                    <!-- <span class="ico-video">Video</span> -->
+                    <div class="img-mask"></div>
+                    <div class="interaction-wrap">
+                        <div class="interaction-item"><i class="icon-comment"></i>{{image.comments|length}}</div>
+                    </div>
+                </a>
+                {% endfor %}
+
+            </div>
+            <div class="more-content">
+                <a href=""
+            </div>
+        </div>
+    </article>
+</div>
+{% endblock %}

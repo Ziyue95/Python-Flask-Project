@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Homepage{% endblock %}
+{% block css %}/static/styles/pages/index.css{% endblock %}
+{% block content %}
+    <h1 style="font-size:40px";>HomePage</h1>
+    <h1 class="important">
+      Welcome to my awesome homepage.
+    </h1>
+    {% for image in images %}
+    <h2 style="background-color:DodgerBlue;"> User Information </h2>
+    <a href="/profile/{{image.user.id}}">
+        <img src="{{image.user.head_url}}" alt="User.headUrl" style="width:42px;height:42px;display: inline-block;">
+    </a>
+    <br/>
+    <i><a title = "{{image.user.username}}" href = "/profile/{{image.user.id}}">{{image.user.username}}</a></i>
+    <hr>
+    <h2> Image of Users </h2>
+    <a href="/image/{{image.id}}">
+        <img src="{{image.url}}" width="150" height="200">
+    </a>
+    <h3> Time of Image </h3>
+    <p>This image is uploaded on <time>{{image.created_data}}</time>.</p>
+    <hr>
+
+    <section class = "discuss-edit">
+        <a class = "icon-heart"></a>
+        <form>
+            <input placeholder="Add Comments..." type="text">
+        </form>
+        <button style="color:tomato">More options</button>
+        <li class="more-discuss">
+            <a>
+                <span>All </span><span class = "">{{image.comments|length}}</span>
+                <span>Comments</span>
+            </a>
+        </li>
+
+        {% for comment in image.comments %}
+        {% if loop.index > 2 %}{% break %}{% endif %}
+        <li>
+            <!--
+            <a class="icon-remove" title = "Delete Comments"></a>
+            -->
+            <a title = "{{comment.user.username}}" href = "/profile/{{comment.user.id}}">{{comment.user.username}}</a>
+            <span>
+                <span>{{comment.content}}</span>
+            </span>
+        </li>
+        {% endfor %}
+    </section>
+
+    <hr>
+
+
+    {%endfor%}
+{% endblock %}
