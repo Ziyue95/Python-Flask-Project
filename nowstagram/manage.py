@@ -23,6 +23,8 @@ def init_database():
             db.session.add(Image(get_image_url(),i+1))#add 3 images for each user, object in class Image has 2 attributes "url" and ”user_id“ as defined in models.py
             for k in range(3):
                 db.session.add(Comment("This is the " + str(k+1) + "th comment on " + str(1+3*i+j) + "th image, written by " + str(1+i) + "th User.", 1+3*i+j, i+1))
+    for j in range(5):
+        db.session.add(Image(get_image_url(), 100))
 
     db.session.commit() #Commit all pending changes to database
 
@@ -65,7 +67,7 @@ def init_database():
     for i in range(2):
         image = Image.query.get(4)
         print(16, image, image.user,image.created_data)
-    print(17, User.query.filter_by(username = "xxx").first())
+    print(17, User.query.all())
 
 
 

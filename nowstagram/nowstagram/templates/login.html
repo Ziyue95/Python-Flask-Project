@@ -2,14 +2,13 @@
 {% block title %}Login&Register{% endblock %}
 {% block css %}/static/styles/pages/login.css{% endblock %}
 {% block content %}
-<main class="main" role="main">
-    <article class="login-cont">
+<main class="main login-main" role="main">
+    <article class="login-cont clearfix">
         <div class="login-pic-box">
-            <img src="/static/images/res/Darling_in_the_Franxx.jpg">
-        </div>
+            <img src="/static/images/res/Darling_in_the_franxx.jpg">
         <div class="login-wrapper">
             <div class="login-box">
-                <form method=post" id="regloginform">
+                <form>
                     <h2 class="login-hd">
                         {% if (msg|length) > 0 %}
                         <b>{{msg}}</b>
@@ -17,16 +16,19 @@
                         Register Franxx Pilot
                         {% endif %}
                     </h2>
-                    <div class="footer-items">
-                        <input class="input-txt" aria-label="Pilot" aria-required="true" autocapitalize="off" maxlength="30" name="username" placeholder="Pliot" value="" type="text" data-reactid=".0.1.0.1.0.1.0.5.0">
-                    </div>
-                    <div class="footer-items">
-                        <input class="input-txt" aria-label="Franxx Code" aria-required="true" autocapitalize="off" maxlength="30" name="password" placeholder="Franxx Code" value="" type="text" data-reactid=".0.1.0.1.0.1.0.6.0">
-                    </div>
-                    <div class="btn-wrapper">
-                        <button class="btn-primary" onclick="form=document.getElementById(regloginform);form.action = '/reg/';">Register</button>
-                        <button class="btn-primary">Login</button>
-                    </div>
+                    <form method="post" id="regloginform">
+                        <div class="form-item">
+                            <input class="input-txt" aria-label="Pilot" aria-required="true" autocapitalize="off" maxlength="30" name="username" placeholder="Pliot" value="" type="text" data-reactid=".0.1.0.1.0.1.0.5.0">
+                        </div>
+                        <div class="footer-items">
+                            <input class="input-txt" aria-label="Franxx Code" aria-required="true" autocapitalize="off" maxlength="30" name="password" placeholder="Franxx Code" value="" type="text" data-reactid=".0.1.0.1.0.1.0.6.0">
+                        </div>
+                        <input type="hidden" name="next" value="{{next}}"/>
+                        <div class="btn-wrapper">
+                            <button class="btn-primary" onclick="form=document.getElementById('regloginform');form.action = '/reg/';">Register</button>
+                            <button class="btn-primary" onclick="form=document.getElementById('regloginform');form.action = '/login/';">Login</button>
+                        </div>
+                    </form>
                     <p class="agreenment">
                         <span>Agreement on becoming a Franxx Pilot</span>
                         <a class="agreenment-link" href="https://darli-fra.jp/" target="_blank">Agreement Terms</a>

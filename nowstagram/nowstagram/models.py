@@ -1,6 +1,6 @@
 # -*- encoding=UTF-8 -*-
 
-from nowstagram import db
+from nowstagram import db, login_manager
 from datetime import datetime
 import random
 
@@ -57,3 +57,24 @@ class User(db.Model):#connect to database create database user
 
     def __repr__(self): #__repr__ is a special method used to represent a class’s objects
         return "<User %d %s>" %(self.id, self.username) #Syntax: object.__repr__(self) Returns a string as a representation of the object.
+    # Add more properties and methods from flask-login to enable user login/logout
+    @property
+    def is_authenticated(self):
+        return True
+
+    @property
+    def is_active(self):
+        return True
+
+
+    @property
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return self.id
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)#query user id from database
