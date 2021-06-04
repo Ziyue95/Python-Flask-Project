@@ -1,17 +1,33 @@
 # -*- encoding=UTF-8 -*-
+import uuid
 
 from nowstagram import app
 from nowstagram import db
 from nowstagram.models import User,Image
-from flask import render_template,redirect,request,flash,get_flashed_messages
-import random, hashlib, json
+from flask import render_template,redirect,request,flash,get_flashed_messages, send_from_directory
+import random, hashlib, json, uuid, os
 from flask_login import login_user, logout_user, current_user, login_required
+from nowstagram.qiniusdk import qiniu_upload_file
 
 @app.route("/")#homepage
 def index():
     # List image based on user id in a descending order
     images = Image.query.order_by(Image.id.desc()).limit(10).all()
     return(render_template("index.html",images = images))
+    #user = User.query.all()
+    #paginate = Image.query.order_by(Image.id.desc()).paginate(page=1, per_page=5, error_out=False)
+    #return render_template("index.html", images = paginate.items, has_next=paginate.has_next)
+
+@app.route("/images/<int:page>/<int:per_page>/")
+def all_images(page, per_page):
+    paginate = Image.query.order_by(Image.id.desc()).paginate(page=page, per_page=per_page, error_out=False)
+    map = {"has_next": paginate.has_next}
+    images = []
+    for image in paginate.items:
+        imgvo = {"id":image.id, "url":image.url, "comment_count":len(image.comments)}#imgvo stores the json attributes for each image
+        images.append(imgvo)
+    map["images"] = images
+    return json.dumps(map)#output json file
 
 @app.route("/image/<int:image_id>/")
 def image(image_id):
@@ -118,3 +134,29 @@ def reg():
 def logout():
     logout_user()
     return redirect("/")
+
+def save_to_local(file, file_name):#upload and save
+    save_dir = app.config["UPLOAD_DIR"]
+    file.save(os.path.join(save_dir,file_name))
+    return "/image/" + file_name
+
+@app.route("/image/<image_name>")
+def view_image(image_name):
+    return send_from_directory(app.config["UPLOAD_DIR"], image_name)
+
+@app.route("/upload",methods={"post"})
+def upload(): #upload image using request method
+    #request.files returns a dictionary
+    file = request.files["file"]#get binary form of data
+    file_ext = ""
+    if file.filename.find(".") > 0:#contain file suffix
+        file_ext = file.filename.rsplit(".",1)[1].strip().lower()#rsplit split based on the right-most "."
+        if file_ext in app.config["ALLOWED_EXT"]: # suffix is supported
+            file_name = str(uuid.uuid1()).replace("-","") + "." + file_ext
+            #url = save_to_local(file, file_name) # save file to local
+            url = qiniu_upload_file(file, file_name)# save file to qiniu cloud
+            if url: # if we save the url, push it to database
+                db.session.add(Image(url, current_user.id))
+                db.session.commit()
+
+    return redirect("/profile/%d" %current_user.id)# return the profile page iof current login user

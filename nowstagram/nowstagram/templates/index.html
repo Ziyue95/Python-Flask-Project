@@ -46,6 +46,11 @@
                 <button class="more-info">Submit</button>
             </section>
         </div>
+        {% if has_next %}
+            <div class="more-content js-load-more">
+                <a class="_oidfu" href="javascript:void(0);">More</a>
+            </div>
+        {% endif %}
     </article>
 {% endfor %}
 </div>
