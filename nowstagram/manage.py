@@ -66,7 +66,7 @@ def init_database():
     print(15, user.images) # One-to-Many Relationship: since one user is related to 3 images; This is done by 1.images = db.relationship("Image"); 2.user_id = db.Column(db.Integer, db.ForeignKey("user.id"))
     for i in range(2):
         image = Image.query.get(4)
-        print(16, image, image.user,image.created_data)
+        print(16, image, image.user,image.created_date)
     print(17, User.query.all())
 
 

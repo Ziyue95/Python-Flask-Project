@@ -27,13 +27,13 @@ class Image(db.Model):#connect to database create database image
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     url = db.Column(db.String(512))
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"))#ForeignKey mean this key value is from other database, here from database user with column id
-    created_data = db.Column(db.DateTime)
+    created_date = db.Column(db.DateTime)
     comments = db.relationship("Comment")
 
     def __init__(self,url,user_id):
         self.url = url
         self.user_id = user_id
-        self.created_data = datetime.now() #this will return the current datetime
+        self.created_date = datetime.now() #this will return the current datetime
 
     def __repr__(self): #__repr__ is a special method used to represent a class’s objects
         return "<Image %d %s>" %(self.user_id, self.url) #Syntax: object.__repr__(self) Returns a string as a representation of the object.
